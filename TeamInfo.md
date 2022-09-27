@@ -19,10 +19,10 @@
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-|  Title      |       ProjectTitle     |
+|  Title      |         DocHunt        |
 | System URL  |      link_to_system    |
 | Video Link  |      link_to_video     |
 
 ## Project Summary
 
-This is a summary of the project!
+A web application designed to help patients find a doctor who has the perfect experience and skills to help them, and to help doctors keep track of information about their patients. Databases will keep track of patients, doctors, medications, vaccinations, and other key information. Doctors will be able to input information about their patients. Patients will be able to view their data, and also search through the doctors that are stored to find one they think could help them, with the ability to sort by a variety of variables including their current symptoms. The application will have advanced search capabilities to find doctors who are especially well equipped to help the patient.
