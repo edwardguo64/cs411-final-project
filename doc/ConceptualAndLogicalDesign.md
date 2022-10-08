@@ -31,13 +31,10 @@ Doctor Login: A doctor can be a user or not one. This relation is a one to one r
 
 Patient Login: A patient can be a user or not one. This relation is a one to one relationship, but need not necessarily exist as not every doctor will choose to use the database. Note patients will have lower database privileges than doctors but might still be able to to update insert and delete certain entities in the database.
 
-Diagnose: A user doctor would be able to input a diagnosis for a patient for a specific date. A patient can have zero to many diagnoses and a diagnosis can only be tied to one patient (one is to one). This is a weak entity set as if we delete the patient all the diagnoses related to that patient should also be deleted.
+Diagnose: A user doctor would be able to input a diagnosis for a patient for a specific date. A patient can have zero to many diagnoses and a diagnosis can only be tied to one patient, so this relationship is a one to many relationship. This is a weak entity set as if we delete the patient all the diagnoses related to that patient should also be deleted.
 
-Vaccinated: A user doctor would be able to input a vaccination for a patient for a specific date. A patient can have zero to many vaccinations and a vaccination date can only be tied to one patient (one is to one) This is a weak entity set as if we delete the patient all the related vaccinations to that patient should also be deleted.
+Vaccinated: A user doctor would be able to input a vaccination for a patient for a specific date. A patient can have zero to many vaccinations and a vaccination date can only be tied to one patient, so this relationship is a one to many relationship. This is a weak entity set as if we delete the patient all the related vaccinations to that patient should also be deleted.
 
-Prescribed: A user doctor would be able to input a prescriptions for a patient for a specific date. A patient can have zero to many prescriptions and a prescription can only be tied to one patient (one is to one). This is a weak entity set as if we delete the patient all the medication related to that patient should also be deleted.
+Prescribed: A user doctor would be able to input a prescriptions for a patient for a specific date. A patient can have zero to many prescriptions and a prescription can only be tied to one patient, so this relationship is a one to many relationship. This is a weak entity set as if we delete the patient all the medication related to that patient should also be deleted.
 
-Appointment:A user doctor would be able to input a appointment for a patient for a specific date. This relation is a zero to many relationship. This most importantly ties doctors and patients together in a zero to many relationship.
-
-
-
+Appointment:A user doctor would be able to input a appointment for a patient for a specific date. This relation is a many to many relationship.
