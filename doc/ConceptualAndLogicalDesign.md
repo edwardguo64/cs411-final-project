@@ -25,7 +25,7 @@ Prescriptions(PatientID: VARCHAR(20) [PK] [FK to Patients.PatientID], Medication
 Vaccines(PatientID: VARCHAR(20) [PK] [FK to Patients.PatientID], VaccineType: VARCHAR[255] [PK], Date: DATE)
 
 Login(UserID: VARCHAR(20) [PK], UserType: VARCHAR(20), DateCreated:DATE, UserName: VARCHAR(50), Password: VARCHAR(50))
-________________________
+```
 
 Description of Relations
 
@@ -40,6 +40,6 @@ Vaccinated: A user doctor would be able to input a vaccination for a patient for
 Prescribed: A user doctor would be able to input a prescriptions for a patient for a specific date. A patient can have zero to many prescriptions and a prescription can only be tied to one patient (one is to one). This is a weak entity set as if we delete the patient all the medication related to that patient should also be deleted.
 
 Appointment:A user doctor would be able to input a appointment for a patient for a specific date. This relation is a zero to many relationship. This most importantly ties doctors and patients together in a zero to many relationship.
-```
+
 
 
