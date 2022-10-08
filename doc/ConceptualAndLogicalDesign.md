@@ -10,8 +10,6 @@
 ## Relational Schema
 
 ```
-Relational Schema
-
 Doctors(DoctorID: VARCHAR(20) [PK], FirstName:VARCHAR(50), LastName:VARCHAR(5), Specialty:VARCHAR(255))
 
 Patients(PatientID:VARCHAR(20) [PK], FirstName: VARCHAR(50), LastName: VARCHAR(50), BirthDate: DATE, Height: REAL, Weight: REAL)
@@ -27,7 +25,7 @@ Vaccines(PatientID: VARCHAR(20) [PK] [FK to Patients.PatientID], VaccineType: VA
 Login(UserID: VARCHAR(20) [PK], UserType: VARCHAR(20), DateCreated:DATE, UserName: VARCHAR(50), Password: VARCHAR(50))
 ```
 
-Description of Relations
+## Description of Relations
 
 Doctor Login: A doctor can be a user or not one. This relation is a one to one relationship, but need not necessarily exist as not every doctor will choose to use the database. Note doctors will probably have higher database privileges to update, insert, and delete entries from the database.
 
