@@ -51,7 +51,7 @@ WHERE p.PatientID NOT IN (
                             -> Index lookup on Appointments using PRIMARY (PatientID=Symptoms.PatientID)  (cost=0.25 rows=2) (actual time=0.002..0.002 rows=2 loops=1000)
 ```
 
-Total time: 21.299ms
+Total time: 26.446ms
 
 #### Indexing by SoreThroat
 
@@ -100,7 +100,7 @@ Total time: 22.239ms
 
 #### Explanation
 
-This query finds what symptoms each doctor has experience in treating by summing up the counts of each symptom in all of their appointments. The total time without indexing is 19.485. The total time for running with indexing on SoreThroat is 16.637 which is less than the time without indexing. This is because you are grouping together based on similar values of SoreThroat so it will be summed faster in the select statement. When indexing on the Patients height 
+This query finds what symptoms each doctor has experience in treating by summing up the counts of each symptom in all of their appointments. The total time without indexing is 26.446ms. The total time for running with indexing on SoreThroat is 24.191 which is less than the time without indexing. This is because similar values of SoreThroat are grouped together with indexing so that when the values are aggregated in the sum, the process is faster. However, when indexing on the Patients’ heights, the total time is 34.267ms which is greater than the original time. Since the height is not involved in any searching or aggregations, there is no benefit for indexing by height and it only adds an extra step, which increases the time. When indexing by both SoreThroat and Height, the total time is 22.239ms. The indexing improved the runtime since values that are aggregated at the end (SoreThroat), are grouped together which speeds up the process. 
 
 ### Query 2 Indexing
 
