@@ -135,7 +135,7 @@ Total Time: 4.63ms
                                     -> Index scan on v using PRIMARY  (cost=101.25 rows=1000) (actual time=0.048..0.279 rows=1000 loops=1)
 ```
 
-Total Time: 9.273ms
+Total Time: 4.776ms
 
 #### Index on first name
 
@@ -190,4 +190,4 @@ Total Time: 4.697ms
 
 #### Explanation
 
-Explanation: In this query we are trying to find patients who have had no vaccines in the last 10 years. The total time is 4.63ms without indexing, with our indexes it runs from 4.697ms to 9.273ms which all take more time than without indexing. The reason using an index does not really help in this case as we are not finding exact matches in our query instead we are finding rows which do not match the PatientIDs we have. In this case indexing just adds a step and we still have to iterate through the whole table to ensure that the results are not in the table. If we were somehow able to make a query that instead used IN instead of NOT IN indexing would probably help.
+Explanation: In this query we are trying to find patients who have had no vaccines in the last 10 years. The total time is 4.63ms without indexing, with our indexes it runs from 4.697ms to 5.031ms which all take more time than without indexing. The reason using an index does not really help in this case as we are not finding exact matches in our query instead we are finding rows which do not match the PatientIDs we have. In this case indexing just adds a step and we still have to iterate through the whole table to ensure that the results are not in the table. If we were somehow able to make a query that instead used IN instead of NOT IN indexing would probably help.

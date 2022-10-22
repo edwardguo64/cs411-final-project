@@ -117,3 +117,6 @@ create table Vaccines (
 <center>
     <img src = "Screenshots/Vaccines_count.png" style = "float: left; margin-right; 10px;">
 </center>
+
+## NOTE
+Please have a look at AdvancedQueries.md for the time analysis of the queries together with the different indexes we chose and the explainations for why we chose them.
