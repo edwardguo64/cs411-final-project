@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <title>Medical System</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+ </head>
+
+ <body>
+   <div class="container mt-4">
+     <div class="card">
+       <div class="card-body">
+         <h2>Patient Search</h2>
+         <form action="mark" method="POST">
+           <div class="form-group">
+             <label for="netid">Patient First Name:</label>
+             <input type="text" class="form-control col-lg-9" id="netid" aria-describedby="emailHelp" placeholder="Enter Name" name="netid">
+           </div>
+           <button type="submit" class="btn btn-primary">Submit</button>
+         </form>
+     </div>
+   </div>
+   <u1><% sql_data.forEach(function(patient) { %>
+     <li>Patient ID: <%= patient.PatientID %>
+       <br>
+       Patient Name: <%= patient.FirstName %> <%= patient.LastName %>
+       <br>
+       Birthdate: <%= patient.BirthDate %>
+       <br>
+       Height: <%= patient.Height %> cm Weight: <%= patient.Weight %> kg
+     </li>
+     <br>
+     <% }); %>
+   </u1>
+   <p><%= no_result %></p>
+ <div class="container mt-4">
+   <div class="card">
+     <div class="card-body">
+       <h2>Register New Patient</h2>
+       <form action="add" method="POST">
+         <div class="form-group">
+           <//input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="PatientID">
+	   <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="FirstName">
+           <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="LastName">
+           <//input type="text" class="form-control col-lg-9" id="BirthDate" aria-describedby="emailHelp" placeholder="Birth Date (yyyy-mm-dd)" name="BirthDate">
+	   <label>
+		   Birth Date:
+		   <input type="date" id="BirthDate" name="BirthDate" value="2022-11-11" min="1900-01-01" max="2023-01-01">
+		   </label>
+	<input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="Height">
+           <input type="text" class="form-control col-lg-9" id="Weight" aria-describedby="emailHelp" placeholder="Weight (kg)" name="Weight">
+         </div>
+         <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+     </div>
+   </div>
+   <p><%= ins_date_invalid %></p>
+ </div>
+<div class="container mt-4">
+   <div class="card">
+     <div class="card-body">
+       <h2>Update Patient</h2>
+       <form action="update" method="POST">
+         <div class="form-group">
+           <input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="updPatientID">
+	   <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="updFirstName">
+           <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="updLastName">
+           <//input type="text" class="form-control col-lg-9" id="BirthDate" aria-describedby="emailHelp" placeholder="Birth Date (yyyy-mm-dd)" name="BirthDate">
+           <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="updHeight">
+           <input type="text" class="form-control col-lg-9" id="Weight" aria-describedby="emailHelp" placeholder="Weight (kg)" name="updWeight">
+         </div>
+         <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+     </div>
+   </div>
+   <p><%= upd_info_mismatch %></p>
+ </div>
+
+ <div class="container mt-4">
+   <div class="card">
+     <div class="card-body">
+       <h2>Remove Patient</h2>
+       <form action="remove" method="POST">
+         <div class="form-group">
+           <input type="text" class="form-control col-lg-9" id="delPatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="delPatientID">
+	   <input type="text" class="form-control col-lg-9" id="delFirstName" aria-describedby="emailHelp" placeholder="First Name" name="delFirstName">
+           <input type="text" class="form-control col-lg-9" id="delLastName" aria-describedby="emailHelp" placeholder="Last Name" name="delLastName">
+         </div>
+         <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+     </div>
+   </div>
+   <p><%= info_mismatch %></p>
+ </div>
+ 
+ <div class="container mt-4">
+  <div class="card">
+   <div class="card-body">
+    <h2>Doctors</h2>
+    <div class="table-responsive">
+     <table class="table table-bordered">
+      <tr>
+       <th>Doctor ID</th>
+       <th>Sore Throat</th>
+       <th>Headache</th>
+       <th>Stomach Ache</th>
+       <th>Hives</th>
+       <th>Cough</th>
+       <th>Wound</th>
+       <th>Burn</th>
+       <th>Muscle Ache</th>
+       <th>Back Pain</th>
+       <th>Acne</th>
+       <th>Toothache</th>
+       <th>Broken Bone</th>
+       <th>Average Temperature</th>
+       <th>Average Height</th>
+       <th>Average Weight</th>
+      </tr>
+      <% 
+	if(doctor_data.length != 0 ) 
+	{
+	    doctor_data.forEach(function(doctor){
+	%>
+	<tr>
+		<td><%= doctor.DoctorID %> </td>
+		<td><%= doctor.SoreThroatCount %></td>
+		<td><%= doctor.HeadacheCount %></td>
+		<td><%= doctor.StomachAcheCount %></td>
+		<td><%= doctor.HiveCount %></td>
+		<td><%= doctor.CoughCount %></td>
+		<td><%= doctor.WoundCount %></td>
+		<td><%= doctor.BurnCount %></td>
+		<td><%= doctor.MuscleAcheCount %></td>
+		<td><%= doctor.BackPainCount %></td>
+		<td><%= doctor.AcneCount %></td>
+		<td><%= doctor.ToothAcheCount %></td>
+		<td><%= doctor.BrokenBoneCount %></td>
+		<td><%= doctor.TemperatureAvg %></td>
+		<td><%= doctor.HeightAvg %></td>
+		<td><%= doctor.WeightAvg %></td>
+	</tr>
+	<%
+		});
+	}
+	else{
+	%>
+	<tr>
+		<td colspan="5">No Data Found</td>
+	</tr>
+	<%
+	}
+      %>
+     </table>
+    </div>
+  </div>
+  </div>
+ </div>
+ <div class="container mt-4">
+  <div class="card">
+   <div class="card-body">
+    <h2>Wall of Shame</h2>
+    <div class="table-responsive">
+     <table class="table table-bordered">
+      <tr>
+       <th>PatientId</th>
+       <th>FirstName</th>
+       <th>LastName</th>
+       </tr>
+       <%if(patient_data.length != 0 ) 
+	{
+	    patient_data.forEach(function(patient){
+ 	%>
+ 	<tr>
+ 		<td><%= patient.PatientID %> </td>
+ 		<td><%= patient.FirstName %></td>
+ 		<td><%= patient.LastName %></td>
+	</tr>
+	<%
+		});
+	}
+	else{
+	%>
+	<tr>
+		<td colspan="5">No Data Found</td>
+	</tr>
+	<%
+	}
+      %>
+     </table>
+    </div>
+  </div>
+  </div>
+ </div>
+
+ </body>
+</html>

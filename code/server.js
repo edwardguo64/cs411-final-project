@@ -16,9 +16,12 @@ connection.connect;
 var app = express();
 var sql_result;
 var sql_data = [];
+var doctor_data = [];
+var patient_data = [];
 var no_result = '';
 var info_mismatch = '';
-
+var upd_info_mismatch = '';
+var ins_date_invalid = '';
 // set up ejs view engine 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -29,10 +32,61 @@ app.use(express.static(__dirname + '../public'));
 
 /* GET home page, respond by rendering index.ejs */
 app.get('/', function(req, res) {
-	res.render('index', { sql_data: sql_data, no_result: no_result, info_mismatch: info_mismatch});
 	sql_data = [];
+	doctor_data = [];
+	patient_data = [];
 	no_result = '';
 	info_mismatch = '';
+	upd_info_mismatch = '';
+	ins_date_invalid = '';
+
+var advQuery1 = `SELECT DoctorID, 
+		SUM(SoreThroat) as SoreThroatCount, 
+		SUM(Headache) as HeadacheCount,
+		SUM(StomachAche) as StomachAcheCount,
+		SUM(Hives) as HiveCount,
+		SUM(Cough) as CoughCount,
+		SUM(Wound) as WoundCount,
+		SUM(Burn) as BurnCount,
+		SUM(MuscleAche) as MuscleAcheCount,
+		SUM(Backpain) as BackPainCount,
+		SUM(Acne) as AcneCount,
+		SUM(ToothAche) as ToothAcheCount,
+		SUM(BrokenBone) as BrokenBoneCount,
+		AVG(Temperature) as TemperatureAvg,
+		AVG(Height) as HeightAvg,
+		AVG(Weight) as WeightAvg
+	FROM Appointments JOIN Symptoms USING(PatientID) JOIN Patients USING(PatientID)
+	GROUP BY DoctorID
+	ORDER BY DoctorID ASC
+	LIMIT 10`;
+var advQuery2 = `SELECT * 
+		 FROM Patients p
+		 WHERE p.PatientID NOT IN (
+		 	SELECT v.PatientID
+			FROM Vaccines v
+			GROUP BY v.PatientID
+			HAVING Max(VaccineDate) > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 YEAR)
+		 )
+		LIMIT 10`;
+	connection.query(advQuery1, function(err,result1) {
+		doctor_data = result1;
+		if (err) {
+			res.send(err);
+			console.log('errorbois');
+			return;
+		}
+		connection.query(advQuery2, function(err,result2) {
+			patient_data = result2;
+			if (err) {
+				res.send(err);
+				return;
+			}
+			
+		res.render('index', { sql_data: sql_data,action:'list',  doctor_data:result1, patient_data:result2, no_result: no_result, info_mismatch: info_mismatch, upd_info_mismatch: upd_info_mismatch, ins_date_invalid: ins_date_invalid});
+		});	
+	});
+
 });
 
 app.get('/success', function(req, res) {
@@ -45,7 +99,7 @@ app.post('/mark', function(req, res) {
   var netid = req.body.netid;
    
   var sql = `SELECT * FROM Patients WHERE FirstName = '${netid}'`;
-	
+   	
 
 
   console.log(sql);
@@ -80,30 +134,68 @@ app.post('/add', function(req, res) {
 	var Height = req.body.Height;
 	var Weight = req.body.Weight;
 
-	var maxIDQry = `SELECT MAX(PatientID) as maxID FROM Patients`
-
-	connection.query(maxIDQry, function(err, result) {
-		if (err) {
-			res.send(err)
-			return;
-		}
-		console.log(result[0].maxID);
-		PatientID = parseInt(result[0].maxID);
-		PatientID++;
-		console.log(PatientID);
-
-		var instData = `INSERT INTO Patients (PatientID, FirstName, LastName, BirthDate, Height, Weight) VALUES ('${PatientID}', '${FirstName}', '${LastName}', '${BirthDate}', '${Height}', '${Weight}')`;
-
-		console.log(instData);
-		connection.query(instData, function(err, result) {
+	var maxIDQry = `SELECT MAX(PatientID) as maxID FROM Patients`;
+		connection.query(maxIDQry, function(err, result) {
 			if (err) {
 				res.send(err)
 				return;
 			}
-			res.redirect('/');
+			console.log(result[0].maxID);
+			PatientID = parseInt(result[0].maxID);
+			PatientID++;
+			console.log(PatientID);
+		
+			console.log(BirthDate);
+				
+			var instData = `INSERT INTO Patients (PatientID, FirstName, LastName, BirthDate, Height, Weight) VALUES ('${PatientID}', '${FirstName}', '${LastName}', '${BirthDate}', '${Height}', '${Weight}')`;
+
+			console.log(instData);
+			connection.query(instData, function(err, result) {
+				if (err) {
+					res.send(err)
+					return;
+				}
+				res.redirect('/');
+			});
 		});
+});
+
+app.post('/update', function(req, res) {
+	var PatientID = req.body.updPatientID;
+	var FirstName = req.body.updFirstName;
+	var LastName = req.body.updLastName;
+	var Height = parseInt(req.body.updHeight);
+	var Weight = parseInt(req.body.updWeight);
+
+	var pidCheck = `SELECT FirstName, LastName FROM Patients WHERE PatientID = '${PatientID}'`;
+	
+	console.log(pidCheck);
+	connection.query(pidCheck, function(err, result) {
+		if (err) {
+			res.send(err)
+			return;
+		}
+		console.log(result[0]);
+
+		if(FirstName != result[0].FirstName || LastName != result[0].LastName){
+			console.log("names don't match");
+			upd_info_mismatch = "Patient does not exist";
+			res.redirect('/');
+		}
+		else{
+			var updInfo = `UPDATE Patients SET Height = '${Height}', Weight = '${Weight}' WHERE PatientID = '${PatientID}'`;
+			console.log(updInfo);
+			connection.query(updInfo, function(err, result) {
+				if (err){
+					res.send(err);
+					return;
+				}
+				res.redirect('/');
+			});
+		}
 	});
 });
+
 
 app.post('/remove', function(req, res) {
 	var pid = req.body.delPatientID;
@@ -139,6 +231,50 @@ app.post('/remove', function(req, res) {
 		}
 	});
 });
+app.get('/advanceQuery1', function(req,res) {
+
+	
+var advQuery1 = `SELECT DoctorID, 
+		SUM(SoreThroat) as SoreThroatCount, 
+		SUM(Headache) as HeadacheCount,
+		SUM(StomachAche) as StomachAcheCount,
+		SUM(Hives) as HiveCount,
+		SUM(Cough) as CoughCount,
+		SUM(Wound) as WoundCount,
+		SUM(Burn) as BurnCount,
+		SUM(MuscleAche) as MuscleAcheCount,
+		SUM(Backpain) as BackPainCount,
+		SUM(Acne) as AcneCount,
+		SUM(ToothAche) as ToothAcheCount,
+		SUM(BrokenBone) as BrokenBoneCount,
+		AVG(Temperature) as TemperatureAvg,
+		AVG(Height) as HeightAvg,
+		AVG(Weight) as WeightAvg
+	FROM Appointments JOIN Symptoms USING(PatientID) JOIN Patients USING(PatientID)
+	GROUP BY DoctorID
+	ORDER BY DoctorID ASC
+	LIMIT 10`;
+	
+	console.log("hi");
+	console.log(advQuery1);
+	connection.query(advQuery1, function(err,result) {
+		doctor_data = result;
+		if (err) {
+			res.send(err);
+			console.log('errorbois');
+			return;
+		}
+		
+		res.render('Doctors', {title: 'Advance Query 1', action:'list', doctor_data:result});
+		
+		
+		console.log(doctor_data);
+		res.redirect('/');
+	});
+});
+//app.post('/advancequery2', function(req,res) {
+
+//});
 
 app.listen(80, function () {
     console.log('Node app is running on port 80');
