@@ -12,7 +12,7 @@
             <div class="card">
               <div class="card-body">
                 <h2>Patient Search</h2>
-                <form action="go-to-patient" method="POST">
+                <form action="patient/search" method="POST">
                   <div class="form-group">
                     <label for="netid">Patient First Name:</label>
                     <input type="text" class="form-control col-lg-9" id="netid" aria-describedby="emailHelp" placeholder="Enter Name" name="netid">
@@ -21,7 +21,7 @@
                 </form>
             </div>
         </div>
-        <u1><% sql_data.forEach(function(patient) { %>
+        <u1><% patient_search_data.forEach(function(patient) { %>
             <li>Patient ID: <%= patient.PatientID %>
                 <br>
                 Patient Name: <%= patient.FirstName %> <%= patient.LastName %>
