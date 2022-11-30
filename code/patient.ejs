@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Patient Medical System</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="container mt-4">
+            <div class="card">
+              <div class="card-body">
+                <h2>Patient Search</h2>
+                <form action="go-to-patient" method="POST">
+                  <div class="form-group">
+                    <label for="netid">Patient First Name:</label>
+                    <input type="text" class="form-control col-lg-9" id="netid" aria-describedby="emailHelp" placeholder="Enter Name" name="netid">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <u1><% sql_data.forEach(function(patient) { %>
+            <li>Patient ID: <%= patient.PatientID %>
+                <br>
+                Patient Name: <%= patient.FirstName %> <%= patient.LastName %>
+                <br>
+                Birthdate: <%= patient.BirthDate %>
+                <br>
+                Height: <%= patient.Height %> cm Weight: <%= patient.Weight %> kg
+            </li>
+            <br>
+            <% }); %>
+        </u1>
+        <p><%= no_result %></p>
+    </body>
+</html>

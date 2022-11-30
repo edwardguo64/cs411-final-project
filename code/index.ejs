@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-   <title>Medical System</title>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
- </head>
+  <head>
+    <title>Medical System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
 
- <body>
-   <div class="container mt-4">
-     <div class="card">
-       <div class="card-body">
-         <h2>Patient Search</h2>
-         <form action="mark" method="POST">
-           <div class="form-group">
-             <label for="netid">Patient First Name:</label>
-             <input type="text" class="form-control col-lg-9" id="netid" aria-describedby="emailHelp" placeholder="Enter Name" name="netid">
-           </div>
-           <button type="submit" class="btn btn-primary">Submit</button>
-         </form>
-     </div>
-   </div>
-   <u1><% sql_data.forEach(function(patient) { %>
-     <li>Patient ID: <%= patient.PatientID %>
-       <br>
-       Patient Name: <%= patient.FirstName %> <%= patient.LastName %>
-       <br>
-       Birthdate: <%= patient.BirthDate %>
-       <br>
-       Height: <%= patient.Height %> cm Weight: <%= patient.Weight %> kg
-     </li>
-     <br>
-     <% }); %>
-   </u1>
-   <p><%= no_result %></p>
- <div class="container mt-4">
-   <div class="card">
-     <div class="card-body">
-       <h2>Register New Patient</h2>
-       <form action="add" method="POST">
-         <div class="form-group">
-           <//input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="PatientID">
-	   <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="FirstName">
-           <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="LastName">
-           <//input type="text" class="form-control col-lg-9" id="BirthDate" aria-describedby="emailHelp" placeholder="Birth Date (yyyy-mm-dd)" name="BirthDate">
+  <body>
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h2>Patient Search</h2>
+          <form action="mark" method="POST">
+            <div class="form-group">
+              <label for="netid">Patient First Name:</label>
+              <input type="text" class="form-control col-lg-9" id="netid" aria-describedby="emailHelp" placeholder="Enter Name" name="netid">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+      <u1><% sql_data.forEach(function(patient) { %>
+        <li>Patient ID: <%= patient.PatientID %>
+          <br>
+          Patient Name: <%= patient.FirstName %> <%= patient.LastName %>
+          <br>
+          Birthdate: <%= patient.BirthDate %>
+          <br>
+          Height: <%= patient.Height %> cm Weight: <%= patient.Weight %> kg
+        </li>
+        <br>
+      <% }); %>
+      </u1>
+    <p><%= no_result %></p>
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h2>Register New Patient</h2>
+          <form action="add" method="POST">
+            <div class="form-group">
+              <input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="PatientID">
+	            <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="FirstName">
+              <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="LastName">
+              <input type="text" class="form-control col-lg-9" id="BirthDate" aria-describedby="emailHelp" placeholder="Birth Date (yyyy-mm-dd)" name="BirthDate">
 	   <label>
 		   Birth Date:
 		   <input type="date" id="BirthDate" name="BirthDate" value="2022-11-11" min="1900-01-01" max="2023-01-01">

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Medical System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h2>Select who you are:</h2>
+          <form action="/patient" method="POST">
+            <button type="button" class="btn btn-primary">Patient</button>
+          </form>
+          <form action="/doctor" method="POST">
+            <button type="button" class="btn btn-primary">Doctor</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

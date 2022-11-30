@@ -15,7 +15,7 @@ connection.connect;
 
 var app = express();
 var sql_result;
-var sql_data = [];
+var patient_search_data = [];
 var doctor_data = [];
 var patient_data = [];
 var no_result = '';
@@ -30,45 +30,38 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '../public'));
 
-/* GET home page, respond by rendering index.ejs */
+/* GET home page, respond by rendering home.ejs */
 app.get('/', function(req, res) {
-	sql_data = [];
-	doctor_data = [];
-	patient_data = [];
-	no_result = '';
-	info_mismatch = '';
-	upd_info_mismatch = '';
-	ins_date_invalid = '';
-
-var advQuery1 = `SELECT DoctorID, 
-		SUM(SoreThroat) as SoreThroatCount, 
-		SUM(Headache) as HeadacheCount,
-		SUM(StomachAche) as StomachAcheCount,
-		SUM(Hives) as HiveCount,
-		SUM(Cough) as CoughCount,
-		SUM(Wound) as WoundCount,
-		SUM(Burn) as BurnCount,
-		SUM(MuscleAche) as MuscleAcheCount,
-		SUM(Backpain) as BackPainCount,
-		SUM(Acne) as AcneCount,
-		SUM(ToothAche) as ToothAcheCount,
-		SUM(BrokenBone) as BrokenBoneCount,
-		AVG(Temperature) as TemperatureAvg,
-		AVG(Height) as HeightAvg,
-		AVG(Weight) as WeightAvg
-	FROM Appointments JOIN Symptoms USING(PatientID) JOIN Patients USING(PatientID)
-	GROUP BY DoctorID
-	ORDER BY DoctorID ASC
-	LIMIT 10`;
-var advQuery2 = `SELECT * 
-		 FROM Patients p
-		 WHERE p.PatientID NOT IN (
-		 	SELECT v.PatientID
-			FROM Vaccines v
-			GROUP BY v.PatientID
-			HAVING Max(VaccineDate) > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 YEAR)
-		 )
+	res.render('home');
+	/*var advQuery1 = `SELECT DoctorID, 
+			SUM(SoreThroat) as SoreThroatCount, 
+			SUM(Headache) as HeadacheCount,
+			SUM(StomachAche) as StomachAcheCount,
+			SUM(Hives) as HiveCount,
+			SUM(Cough) as CoughCount,
+			SUM(Wound) as WoundCount,
+			SUM(Burn) as BurnCount,
+			SUM(MuscleAche) as MuscleAcheCount,
+			SUM(Backpain) as BackPainCount,
+			SUM(Acne) as AcneCount,
+			SUM(ToothAche) as ToothAcheCount,
+			SUM(BrokenBone) as BrokenBoneCount,
+			AVG(Temperature) as TemperatureAvg,
+			AVG(Height) as HeightAvg,
+			AVG(Weight) as WeightAvg
+		FROM Appointments JOIN Symptoms USING(PatientID) JOIN Patients USING(PatientID)
+		GROUP BY DoctorID
+		ORDER BY DoctorID ASC
 		LIMIT 10`;
+	var advQuery2 = `SELECT * 
+			FROM Patients p
+			WHERE p.PatientID NOT IN (
+				SELECT v.PatientID
+				FROM Vaccines v
+				GROUP BY v.PatientID
+				HAVING Max(VaccineDate) > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 YEAR)
+			)
+			LIMIT 10`;
 	connection.query(advQuery1, function(err,result1) {
 		doctor_data = result1;
 		if (err) {
@@ -82,48 +75,64 @@ var advQuery2 = `SELECT *
 				res.send(err);
 				return;
 			}
-			
-		res.render('index', { sql_data: sql_data,action:'list',  doctor_data:result1, patient_data:result2, no_result: no_result, info_mismatch: info_mismatch, upd_info_mismatch: upd_info_mismatch, ins_date_invalid: ins_date_invalid});
 		});	
 	});
-
+	patient_search_data = [];
+	doctor_data = [];
+	patient_data = [];
+	no_result = '';
+	info_mismatch = '';
+	upd_info_mismatch = '';
+	ins_date_invalid = '';*/
 });
 
-app.get('/success', function(req, res) {
-	res.render('index', { sql_result: "asdf" });
-	res.send({'message': sql_result});
+app.post('/go-to-patient', function(req, res) {
+	res.redirect('/patient');
 });
  
+app.get('/patient', function(req, res) {
+	res.render('patient', {patient_search_data: patient_search_data, action:'list',  doctor_data:doctor_data, patient_data:patient_data, no_result: no_result, info_mismatch: info_mismatch, upd_info_mismatch: upd_info_mismatch, ins_date_invalid: ins_date_invalid});
+	patient_search_data = [];
+	doctor_data = [];
+	patient_data = [];
+	no_result = '';
+	info_mismatch = '';
+	upd_info_mismatch = '';
+	ins_date_invalid = '';
+});
+
 // this code is executed when a user clicks the form submit button
-app.post('/mark', function(req, res) {
-  var netid = req.body.netid;
-   
-  var sql = `SELECT * FROM Patients WHERE FirstName = '${netid}'`;
-   	
+app.post('/patient/search', function(req, res) {
+	var netid = req.body.netid;
 
+	var sql = `SELECT * FROM Patients WHERE FirstName = '${netid}'`;
 
-  console.log(sql);
-  connection.query(sql, function(err, result) {
-    if (err) {
-      res.send(err)
-      return;
-    }
-    sql_result = result;
-	  console.log(sql_result);
-	if (sql_result[0] != null) {
-		console.log('found someone');
-		console.log(sql_result);
-		sql_data = sql_result;
-		no_result = '';
-	} else {
-		console.log('no one found');
-		console.log(sql_result);
-		sql_data = [];
-		no_result = "Patient not found";
-	}
+	console.log(sql);
+	connection.query(sql, function(err, result) {
+		if (err) {
+			res.send(err)
+			return;
+		}
+		sql_result = result;
+			console.log(sql_result);
+		if (sql_result[0] != null) {
+			console.log('found someone');
+			console.log(sql_result);
+			patient_search_data = sql_result;
+			no_result = '';
+		} else {
+			console.log('no one found');
+			console.log(sql_result);
+			patient_search_data = [];
+			no_result = "Patient not found";
+		}
 
-    res.redirect('/');
-  });
+		res.redirect('/patient');
+  	});
+});
+
+app.get('/doctor', function(req, res) {
+
 });
 
 app.post('/add', function(req, res) {
