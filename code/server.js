@@ -14,11 +14,17 @@ connection.connect;
 
 
 var app = express();
-var sql_result;
+var has_patient_searched = 0;
+var pat_table_idx = 0;
+var has_doctor_searched = 0;
+var has_doctor_searched1 = 0;
+var doc_table_idx = 0;
 var patient_search_data = [];
+var patient_search_data1 = [];
+var symptom_search_data = [];
+var prescription_search_data = [];
 var doctor_data = [];
 var patient_data = [];
-var no_result = '';
 var info_mismatch = '';
 var upd_info_mismatch = '';
 var ins_date_invalid = '';
@@ -91,48 +97,179 @@ app.post('/go-to-patient', function(req, res) {
 });
  
 app.get('/patient', function(req, res) {
-	res.render('patient', {patient_search_data: patient_search_data, action:'list',  doctor_data:doctor_data, patient_data:patient_data, no_result: no_result, info_mismatch: info_mismatch, upd_info_mismatch: upd_info_mismatch, ins_date_invalid: ins_date_invalid});
+	res.render('patient', {has_patient_searched: has_patient_searched, pat_table_idx: pat_table_idx, patient_search_data: patient_search_data, action:'list', doctor_data:doctor_data});
 	patient_search_data = [];
 	doctor_data = [];
-	patient_data = [];
-	no_result = '';
-	info_mismatch = '';
-	upd_info_mismatch = '';
-	ins_date_invalid = '';
 });
 
-// this code is executed when a user clicks the form submit button
-app.post('/patient/search', function(req, res) {
-	var netid = req.body.netid;
+app.post('/patient/search-patients', function(req, res) {
+	var name = req.body.name;
 
-	var sql = `SELECT * FROM Patients WHERE FirstName = '${netid}'`;
+	var sql = `SELECT * FROM Patients WHERE FirstName = '${name}'`;
+
+	has_patient_searched = 1; // used to show table after first press of search, no need to reset after search
+	pat_table_idx = 0;
 
 	console.log(sql);
 	connection.query(sql, function(err, result) {
+		patient_search_data = result;
+		console.log(patient_search_data);
 		if (err) {
 			res.send(err)
 			return;
-		}
-		sql_result = result;
-			console.log(sql_result);
-		if (sql_result[0] != null) {
-			console.log('found someone');
-			console.log(sql_result);
-			patient_search_data = sql_result;
-			no_result = '';
-		} else {
-			console.log('no one found');
-			console.log(sql_result);
-			patient_search_data = [];
-			no_result = "Patient not found";
 		}
 
 		res.redirect('/patient');
   	});
 });
 
-app.get('/doctor', function(req, res) {
+app.post('/patient/search-doctors', function(req, res) {
+	var advQuery1 = `SELECT DoctorID, 
+			SUM(SoreThroat) as SoreThroatCount, 
+			SUM(Headache) as HeadacheCount,
+			SUM(StomachAche) as StomachAcheCount,
+			SUM(Hives) as HiveCount,
+			SUM(Cough) as CoughCount,
+			SUM(Wound) as WoundCount,
+			SUM(Burn) as BurnCount,
+			SUM(MuscleAche) as MuscleAcheCount,
+			SUM(Backpain) as BackPainCount,
+			SUM(Acne) as AcneCount,
+			SUM(ToothAche) as ToothAcheCount,
+			SUM(BrokenBone) as BrokenBoneCount,
+			AVG(Temperature) as TemperatureAvg,
+			AVG(Height) as HeightAvg,
+			AVG(Weight) as WeightAvg
+		FROM Appointments JOIN Symptoms USING(PatientID) JOIN Patients USING(PatientID)
+		GROUP BY DoctorID
+		ORDER BY DoctorID ASC
+		LIMIT 10`;
+	
+	has_patient_searched = 1; // used to show table after first press of search, no need to reset after search
+	pat_table_idx = 1;
 
+	console.log(advQuery1);
+	connection.query(advQuery1, function(err,result) {
+		doctor_data = result;
+		console.log(doctor_data);
+		if (err) {
+			res.send(err);
+			console.log('errorbois');
+			return;
+		}
+
+		res.redirect('/patient');
+	});
+});
+
+app.post('/go-to-doctor', function(req, res) {
+	res.redirect('/doctor');
+});
+
+app.get('/doctor', function(req, res) {
+	res.render('doctor', {has_doctor_searched: has_doctor_searched, has_doctor_searched1: has_doctor_searched1, doc_table_idx: doc_table_idx, patient_search_data1: patient_search_data1, patient_data: patient_data, symptom_search_data: symptom_search_data, prescription_search_data: prescription_search_data});
+	patient_search_data1 = [];
+	patient_data = [];
+	symptom_search_data = [];
+	prescription_search_data = [];
+});
+
+app.post('/doctor/search-patients', function(req, res) {
+	var name = req.body.name1;
+
+	var sql = `SELECT * FROM Patients WHERE FirstName = '${name}'`;
+
+	has_doctor_searched1 = 1; // used to show table after first press of search, no need to reset after search
+
+	console.log(sql);
+	connection.query(sql, function(err, result) {
+		patient_search_data1 = result;
+		console.log(patient_search_data1);
+		if (err) {
+			res.send(err)
+			return;
+		}
+
+		res.redirect('/doctor');
+  	});
+});
+
+app.post('/doctor/symptoms-search', function(req, res) {
+	var patientid = req.body.pid;
+
+	// checks on the text box input
+	if (patientid == '') {
+		patientid = 0;
+	}
+	
+	var sql = `SELECT * FROM Symptoms WHERE PatientID = ${patientid} ORDER BY DigDate DESC`;
+
+	has_doctor_searched = 1;
+	doc_table_idx = 0;
+
+	console.log(sql);
+	connection.query(sql, function(err, result) {
+		symptom_search_data = result;
+		console.log(symptom_search_data);
+		if (err) {
+			res.send(err)
+			return;
+		}
+
+		res.redirect('/doctor');
+  	});
+});
+
+app.post('/doctor/prescription-search', function(req, res) {
+	var patientid = req.body.pid;
+
+	// checks on the text box input
+	if (patientid == '') {
+		patientid = 0;
+	}
+
+	var sql = `SELECT * FROM Prescriptions WHERE PatientID = ${patientid} ORDER BY IssueDate DESC`;
+
+	has_doctor_searched = 1;
+	doc_table_idx = 1;
+
+	console.log(sql);
+	connection.query(sql, function(err, result) {
+		prescription_search_data = result;
+		console.log(prescription_search_data);
+		if (err) {
+			res.send(err)
+			return;
+		}
+
+		res.redirect('/doctor');
+  	});
+});
+
+app.post('/doctor/vac-overdue', function(req, res) {
+	var advQuery2 = `SELECT * 
+		FROM Patients p
+		WHERE p.PatientID NOT IN (
+			SELECT v.PatientID
+			FROM Vaccines v
+			GROUP BY v.PatientID
+			HAVING Max(VaccineDate) > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 YEAR)
+		)
+		LIMIT 10`;
+
+	has_doctor_searched = 1;
+	doc_table_idx = 2;
+	
+	connection.query(advQuery2, function(err,result) {
+		if (err) {
+			res.send(err);
+			return;
+		}
+		patient_data = result;
+		console.log(patient_data);
+
+		res.redirect('/doctor');
+	});
 });
 
 app.post('/add', function(req, res) {
@@ -240,50 +377,6 @@ app.post('/remove', function(req, res) {
 		}
 	});
 });
-app.get('/advanceQuery1', function(req,res) {
-
-	
-var advQuery1 = `SELECT DoctorID, 
-		SUM(SoreThroat) as SoreThroatCount, 
-		SUM(Headache) as HeadacheCount,
-		SUM(StomachAche) as StomachAcheCount,
-		SUM(Hives) as HiveCount,
-		SUM(Cough) as CoughCount,
-		SUM(Wound) as WoundCount,
-		SUM(Burn) as BurnCount,
-		SUM(MuscleAche) as MuscleAcheCount,
-		SUM(Backpain) as BackPainCount,
-		SUM(Acne) as AcneCount,
-		SUM(ToothAche) as ToothAcheCount,
-		SUM(BrokenBone) as BrokenBoneCount,
-		AVG(Temperature) as TemperatureAvg,
-		AVG(Height) as HeightAvg,
-		AVG(Weight) as WeightAvg
-	FROM Appointments JOIN Symptoms USING(PatientID) JOIN Patients USING(PatientID)
-	GROUP BY DoctorID
-	ORDER BY DoctorID ASC
-	LIMIT 10`;
-	
-	console.log("hi");
-	console.log(advQuery1);
-	connection.query(advQuery1, function(err,result) {
-		doctor_data = result;
-		if (err) {
-			res.send(err);
-			console.log('errorbois');
-			return;
-		}
-		
-		res.render('Doctors', {title: 'Advance Query 1', action:'list', doctor_data:result});
-		
-		
-		console.log(doctor_data);
-		res.redirect('/');
-	});
-});
-//app.post('/advancequery2', function(req,res) {
-
-//});
 
 app.listen(80, function () {
     console.log('Node app is running on port 80');

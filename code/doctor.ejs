@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Patient Medical System</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="container mt-4">
+            <div class="card">
+              <div class="card-body">
+                <h2>Doctors Page</h2>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Search</h2>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="name1">Patient First Name:</label>
+                            <input type="text" class="form-control col-lg-9" id="name1" aria-describedby="emailHelp" placeholder="Enter Name" name="name1">
+                        </div>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/search-patients">Search Patient</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="patient_search_table2">
+            <div class = "card">
+                <div class="card-body">
+                    <h2>Search Results</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>PatientId</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Birth Date</th>
+                            <th>Height (cm)</th>
+                            <th>Weight (kg)</th>
+                            </tr>
+                            <%if(patient_search_data1.length != 0 ) 
+                            {
+                                patient_search_data1.forEach(function(patient){
+                            %>
+                                <tr>
+                                <td><%= patient.PatientID %> </td>
+                                <td><%= patient.FirstName %></td>
+                                <td><%= patient.LastName %></td>
+                                <td><%= patient.BirthDate %></td>
+                                <td><%= patient.Height %></td>
+                                <td><%= patient.Weight %></td>
+                                </tr>
+                            <%
+                                });
+                            }
+                            else{
+                            %>
+                                <tr>
+                                <td colspan="6">No Data Found</td>
+                                </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Info Search</h2>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="pid">Patient ID:</label>
+                            <input type="text" class="form-control col-lg-9" id="pid" aria-describedby="emailHelp" placeholder="Enter Patient ID" name="pid">
+                        </div>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/symptoms-search">Symptoms Search</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/prescription-search">Prescriptions Search</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/vac-overdue">Overdue Vaccines</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="symptoms_table">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Symptoms</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>Patient Id</th>
+                            <th>Diagnosed Date</th>
+                            <th>Sore Throat</th>
+                            <th>Headache</th>
+                            <th>Stomach Ache</th>
+                            <th>Hives</th>
+                            <th>Temperature (F)</th>
+                            <th>Cough</th>
+                            <th>Wound</th>
+                            <th>Burn</th>
+                            <th>Muscle Ache</th>
+                            <th>Back Pain</th>
+                            <th>Acne</th>
+                            <th>Tooth Ache</th>
+                            <th>Broken Bone</th>
+                            </tr>
+                            <%if(symptom_search_data.length != 0 ) 
+                            {
+                                symptom_search_data.forEach(function(patient){
+                            %>
+                                <tr>
+                                <td><%= patient.PatientID %> </td>
+                                <td><%= patient.DigDate %></td>
+                                <td><%= patient.SoreThroat %></td>
+                                <td><%= patient.Headache %></td>
+                                <td><%= patient.StomachAche %></td>
+                                <td><%= patient.Hives %></td>
+                                <td><%= patient.Temperature %></td>
+                                <td><%= patient.Cough %></td>
+                                <td><%= patient.Wound %></td>
+                                <td><%= patient.Burn %></td>
+                                <td><%= patient.MuscleAche %></td>
+                                <td><%= patient.BackPain %></td>
+                                <td><%= patient.Acne %></td>
+                                <td><%= patient.ToothAche %></td>
+                                <td><%= patient.BrokenBone %></td>
+                                </tr>
+                            <%
+                                });
+                            }
+                            else{
+                            %>
+                                <tr>
+                                <td colspan="15">No Data Found</td>
+                                </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="prescriptions_table">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Prescriptions</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>Patient Id</th>
+                            <th>Prescriptions</th>
+                            <th>Issue Date</th>
+                            <th>Dosage</th>
+                            </tr>
+                            <%if(prescription_search_data.length != 0 ) 
+                            {
+                                prescription_search_data.forEach(function(patient){
+                            %>
+                                <tr>
+                                <td><%= patient.PatientID %> </td>
+                                <td><%= patient.Medication %></td>
+                                <td><%= patient.IssueDate %></td>
+                                <td><%= patient.Dosage %></td>
+                                </tr>
+                            <%
+                                });
+                            }
+                            else{
+                            %>
+                                <tr>
+                                <td colspan="4">No Data Found</td>
+                                </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-4" id="vac_overdue_table">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Wall of Shame</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>Patient Id</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            </tr>
+                            <%if(patient_data.length != 0 ) 
+                            {
+                                patient_data.forEach(function(patient){
+                            %>
+                                <tr>
+                                <td><%= patient.PatientID %> </td>
+                                <td><%= patient.FirstName %></td>
+                                <td><%= patient.LastName %></td>
+                                </tr>
+                            <%
+                                });
+                            }
+                            else{
+                            %>
+                                <tr>
+                                <td colspan="3">No Data Found</td>
+                                </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if (has_doctor_searched1 == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_search_table2");
+                x.style.display = "none";
+            </script>
+        <% } else { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_search_table2");
+                x.style.display = "inline";
+            </script>
+        <% } %>
+
+        <% if (has_doctor_searched == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("symptoms_table");
+                x.style.display = "none";
+
+                x = document.getElementById("prescriptions_table");
+                x.style.display = "none";
+
+                x = document.getElementById("vac_overdue_table");
+                x.style.display = "none";
+            </script>
+        <% } else { 
+            if (doc_table_idx == 0) { %>
+                <script language="javascript">
+                    var x = document.getElementById("symptoms_table");
+                    x.style.display = "inline";
+
+                    x = document.getElementById("prescriptions_table");
+                    x.style.display = "none";
+
+                    x = document.getElementById("vac_overdue_table");
+                    x.style.display = "none";
+                </script>
+            <% } else if (doc_table_idx == 1) { %>
+                <script language="javascript">
+                    var x = document.getElementById("symptoms_table");
+                    x.style.display = "none";
+
+                    x = document.getElementById("prescriptions_table");
+                    x.style.display = "inline";
+
+                    x = document.getElementById("vac_overdue_table");
+                    x.style.display = "none";
+                </script>
+            <% } else if (doc_table_idx == 2) { %>
+                <script language="javascript">
+                    var x = document.getElementById("symptoms_table");
+                    x.style.display = "none";
+
+                    x = document.getElementById("prescriptions_table");
+                    x.style.display = "none";
+
+                    x = document.getElementById("vac_overdue_table");
+                    x.style.display = "inline";
+                </script>
+            <% } %>
+        <% } %>
+    </body>
+</html>

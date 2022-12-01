@@ -11,28 +11,151 @@
         <div class="container mt-4">
             <div class="card">
               <div class="card-body">
-                <h2>Patient Search</h2>
-                <form action="patient/search" method="POST">
-                  <div class="form-group">
-                    <label for="netid">Patient First Name:</label>
-                    <input type="text" class="form-control col-lg-9" id="netid" aria-describedby="emailHelp" placeholder="Enter Name" name="netid">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                <h2>Patients Page</h2>
             </div>
         </div>
-        <u1><% patient_search_data.forEach(function(patient) { %>
-            <li>Patient ID: <%= patient.PatientID %>
-                <br>
-                Patient Name: <%= patient.FirstName %> <%= patient.LastName %>
-                <br>
-                Birthdate: <%= patient.BirthDate %>
-                <br>
-                Height: <%= patient.Height %> cm Weight: <%= patient.Weight %> kg
-            </li>
-            <br>
-            <% }); %>
-        </u1>
-        <p><%= no_result %></p>
+        
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Search</h2>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="name">Patient First Name:</label>
+                            <input type="text" class="form-control col-lg-9" id="name" aria-describedby="emailHelp" placeholder="Enter Name" name="name">
+                        </div>
+                        <button type="submit" class="btn btn-primary" formaction="patient/search-patients">Search Patient</button>
+                        <button type="submit" class="btn btn-primary" formaction="patient/search-doctors">Search Doctors</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="patient_search_table">
+            <div class = "card">
+                <div class="card-body">
+                    <h2>Search Results</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>PatientId</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Birth Date</th>
+                            <th>Height (cm)</th>
+                            <th>Weight (kg)</th>
+                            </tr>
+                            <%if(patient_search_data.length != 0 ) 
+                            {
+                                patient_search_data.forEach(function(patient){
+                            %>
+                                <tr>
+                                <td><%= patient.PatientID %> </td>
+                                <td><%= patient.FirstName %></td>
+                                <td><%= patient.LastName %></td>
+                                <td><%= patient.BirthDate %></td>
+                                <td><%= patient.Height %></td>
+                                <td><%= patient.Weight %></td>
+                                </tr>
+                            <%
+                                });
+                            }
+                            else{
+                            %>
+                                <tr>
+                                <td colspan="6">No Data Found</td>
+                                </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="doctor_search_table">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Doctors</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>Doctor ID</th>
+                            <th>Sore Throat</th>
+                            <th>Headache</th>
+                            <th>Stomach Ache</th>
+                            <th>Hives</th>
+                            <th>Cough</th>
+                            <th>Wound</th>
+                            <th>Burn</th>
+                            <th>Muscle Ache</th>
+                            <th>Back Pain</th>
+                            <th>Acne</th>
+                            <th>Toothache</th>
+                            <th>Broken Bone</th>
+                            <th>Average Temperature (F)</th>
+                            <th>Average Height (cm)</th>
+                            <th>Average Weight (kg)</th>
+                            </tr>
+                            <% if(doctor_data.length != 0 ) {
+                                doctor_data.forEach(function(doctor) { %>
+                                    <tr>
+                                    <td><%= doctor.DoctorID %> </td>
+                                    <td><%= doctor.SoreThroatCount %></td>
+                                    <td><%= doctor.HeadacheCount %></td>
+                                    <td><%= doctor.StomachAcheCount %></td>
+                                    <td><%= doctor.HiveCount %></td>
+                                    <td><%= doctor.CoughCount %></td>
+                                    <td><%= doctor.WoundCount %></td>
+                                    <td><%= doctor.BurnCount %></td>
+                                    <td><%= doctor.MuscleAcheCount %></td>
+                                    <td><%= doctor.BackPainCount %></td>
+                                    <td><%= doctor.AcneCount %></td>
+                                    <td><%= doctor.ToothAcheCount %></td>
+                                    <td><%= doctor.BrokenBoneCount %></td>
+                                    <td><%= doctor.TemperatureAvg %></td>
+                                    <td><%= doctor.HeightAvg %></td>
+                                    <td><%= doctor.WeightAvg %></td>
+                                </tr>
+                            <% });
+                            } else { %>
+                                <tr>
+                                <td colspan="16">No Data Found</td>
+                                </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if (has_patient_searched == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_search_table");
+                x.style.display = "none";
+
+                x = document.getElementById("doctor_search_table");
+                x.style.display = "none";
+            </script>
+        <% } else {
+            if (pat_table_idx == 0) { %>
+                <script language="javascript">
+                    var x = document.getElementById("patient_search_table");
+                    x.style.display = "inline";
+
+                    x = document.getElementById("doctor_search_table");
+                    x.style.display = "none";
+                </script>
+            <% } else if (pat_table_idx == 1) { %>
+                <script language="javascript">
+                    var x = document.getElementById("patient_search_table");
+                    x.style.display = "none";
+
+                    x = document.getElementById("doctor_search_table");
+                    x.style.display = "inline";
+                </script>
+            <% } %>
+        <% } %>
     </body>
 </html>

@@ -12,12 +12,9 @@
       <div class="card">
         <div class="card-body">
           <h2>Select who you are:</h2>
-          <form action="go-to-patient" method="POST">
-            <button type="submit" class="btn btn-primary">Patient</button>
-          </form>
-          <form action="/doctor" method="POST">
-            <button type="submit" class="btn btn-primary">Doctor</button>
-          </form>
+          <form method="POST">
+            <button type="submit" class="btn btn-primary" formaction="go-to-patient">Patient</button>
+            <button type="submit" class="btn btn-primary" formaction="go-to-doctor">Doctor</button>
         </div>
       </div>
     </div>
