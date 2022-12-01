@@ -26,8 +26,7 @@ var prescription_search_data = [];
 var doctor_data = [];
 var patient_data = [];
 var info_mismatch = '';
-var upd_info_mismatch = '';
-var ins_date_invalid = '';
+var upd_info = '';
 // set up ejs view engine 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -88,7 +87,7 @@ app.get('/', function(req, res) {
 	patient_data = [];
 	no_result = '';
 	info_mismatch = '';
-	upd_info_mismatch = '';
+	upd_info = '';
 	ins_date_invalid = '';*/
 });
 
@@ -167,11 +166,11 @@ app.post('/go-to-doctor', function(req, res) {
 });
 
 app.get('/doctor', function(req, res) {
-	res.render('doctor', {has_doctor_searched: has_doctor_searched, has_doctor_searched1: has_doctor_searched1, doc_table_idx: doc_table_idx, patient_search_data1: patient_search_data1, patient_data: patient_data, symptom_search_data: symptom_search_data, prescription_search_data: prescription_search_data});
+	res.render('doctor', {has_doctor_searched: has_doctor_searched, has_doctor_searched1: has_doctor_searched1, doc_table_idx: doc_table_idx, patient_search_data1: patient_search_data1, patient_data: patient_data, symptom_search_data: symptom_search_data, prescription_search_data: prescription_search_data, upd_info: upd_info});
 	patient_search_data1 = [];
-	patient_data = [];
 	symptom_search_data = [];
 	prescription_search_data = [];
+	upd_info = [];
 });
 
 app.post('/doctor/search-patients', function(req, res) {
@@ -272,7 +271,7 @@ app.post('/doctor/vac-overdue', function(req, res) {
 	});
 });
 
-app.post('/add', function(req, res) {
+app.post('/doctor/add-patient', function(req, res) {
 	var PatientID;
 	var FirstName = req.body.FirstName;
 	var LastName = req.body.LastName;
@@ -281,32 +280,32 @@ app.post('/add', function(req, res) {
 	var Weight = req.body.Weight;
 
 	var maxIDQry = `SELECT MAX(PatientID) as maxID FROM Patients`;
-		connection.query(maxIDQry, function(err, result) {
+	connection.query(maxIDQry, function(err, result) {
+		if (err) {
+			res.send(err)
+			return;
+		}
+		console.log(result[0].maxID);
+		PatientID = parseInt(result[0].maxID);
+		PatientID++;
+		console.log(PatientID);
+	
+		console.log(BirthDate);
+			
+		var instData = `INSERT INTO Patients (PatientID, FirstName, LastName, BirthDate, Height, Weight) VALUES ('${PatientID}', '${FirstName}', '${LastName}', '${BirthDate}', '${Height}', '${Weight}')`;
+
+		console.log(instData);
+		connection.query(instData, function(err, result) {
 			if (err) {
 				res.send(err)
 				return;
 			}
-			console.log(result[0].maxID);
-			PatientID = parseInt(result[0].maxID);
-			PatientID++;
-			console.log(PatientID);
-		
-			console.log(BirthDate);
-				
-			var instData = `INSERT INTO Patients (PatientID, FirstName, LastName, BirthDate, Height, Weight) VALUES ('${PatientID}', '${FirstName}', '${LastName}', '${BirthDate}', '${Height}', '${Weight}')`;
-
-			console.log(instData);
-			connection.query(instData, function(err, result) {
-				if (err) {
-					res.send(err)
-					return;
-				}
-				res.redirect('/');
-			});
+			res.redirect('/doctor');
 		});
+	});
 });
 
-app.post('/update', function(req, res) {
+app.post('/doctor/update', function(req, res) {
 	var PatientID = req.body.updPatientID;
 	var FirstName = req.body.updFirstName;
 	var LastName = req.body.updLastName;
@@ -325,7 +324,7 @@ app.post('/update', function(req, res) {
 
 		if(FirstName != result[0].FirstName || LastName != result[0].LastName){
 			console.log("names don't match");
-			upd_info_mismatch = "Patient does not exist";
+			upd_info = "Patient does not exist";
 			res.redirect('/');
 		}
 		else{
@@ -336,7 +335,8 @@ app.post('/update', function(req, res) {
 					res.send(err);
 					return;
 				}
-				res.redirect('/');
+				upd_info = "Patient info updated"
+				res.redirect('/doctor');
 			});
 		}
 	});

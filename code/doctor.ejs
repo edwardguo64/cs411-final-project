@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="container mt-4" id="patient_search_table2">
+        <div class="container mt-4" id="patient_search_table1">
             <div class = "card">
                 <div class="card-body">
                     <h2>Search Results</h2>
@@ -69,6 +69,60 @@
                             %>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Edit Patients</h2>
+                    <form method="POST">
+                        <button type="submit" class="btn btn-primary" formaction="doctor/add-patient">Add</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/update-patient">Edit</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/remove-patient">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="patient_add">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Register New Patient</h2>
+                    <form action="add" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="FirstName">
+                            <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="LastName">
+                            <input type="text" class="form-control col-lg-9" id="BirthDate" aria-describedby="emailHelp" placeholder="Birth Date (yyyy-mm-dd)" name="BirthDate">
+                            <label>
+                                Birth Date:
+                                <input type="date" id="BirthDate" name="BirthDate" value="2022-11-11" min="1900-01-01" max="2023-01-01">
+                            </label>
+                            <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="Height">
+                            <input type="text" class="form-control col-lg-9" id="Weight" aria-describedby="emailHelp" placeholder="Weight (kg)" name="Weight">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="patient_update">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Update Patient</h2>
+                    <form action="update" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="updPatientID">
+	                        <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="updFirstName">
+                            <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="updLastName">
+                            <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="updHeight">
+                            <input type="text" class="form-control col-lg-9" id="Weight" aria-describedby="emailHelp" placeholder="Weight (kg)" name="updWeight">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <p><%= upd_info %></p>
                 </div>
             </div>
         </div>
@@ -228,12 +282,12 @@
 
         <% if (has_doctor_searched1 == 0) { %>
             <script language="javascript">
-                var x = document.getElementById("patient_search_table2");
+                var x = document.getElementById("patient_search_table1");
                 x.style.display = "none";
             </script>
         <% } else { %>
             <script language="javascript">
-                var x = document.getElementById("patient_search_table2");
+                var x = document.getElementById("patient_search_table1");
                 x.style.display = "inline";
             </script>
         <% } %>
