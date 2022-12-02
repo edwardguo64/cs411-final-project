@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Medical System</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Symptoms Form:</h2>
+                    <form method="POST">
+                        <input type="text" class="form-control col-lg-9" id="symPatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="symPatientID"><br>
+
+                        <p><% pid_invalid %></p>
+                        
+                        <label>
+                            Diagnosed Date:
+                            <input type="date" id="symDigDate" name="symDigDate" value="2022-11-11" min="1900-01-01" max="2023-01-01">
+                        </label><br>
+
+                        <input type="text" class="form-control col-lg-9" id="symTemperature" aria-describedby="emailHelp" placeholder="Temperature (F)" name="symTemperature"><br>
+
+                        <p><% temp_invalid %></p>
+
+                        <p>Select the symptoms</p>
+
+                        <input type="checkbox" id="symSoreThroat" name="symSoreThroat" value="1">
+                        <label for="symSoreThroat"> Sore Throat</label><br>
+                        <input type="checkbox" id="symHeadache" name="symHeadache" value="1">
+                        <label for="newHeadache"> Headache</label><br>
+                        <input type="checkbox" id="symStomachAche" name="symStomachAche" value="1">
+                        <label for="symStomachAche"> Stomach Ache</label><br>
+                        <input type="checkbox" id="symHives" name="symHives" value="1">
+                        <label for="newStomachAche"> Hives</label><br>
+                        <input type="checkbox" id="symCough" name="symCough" value="1">
+                        <label for="symCough"> Cough</label><br>
+                        <input type="checkbox" id="symWound" name="symWound" value="1">
+                        <label for="symWound"> Wound</label><br>
+                        <input type="checkbox" id="symBurn" name="symBurn" value="1">
+                        <label for="symBurn"> Burn</label><br>
+                        <input type="checkbox" id="symMuscleAche" name="symMuscleAche" value="1">
+                        <label for="symMuscleAche"> Musche Ache</label><br>
+                        <input type="checkbox" id="symBackPain" name="symBackPain" value="1">
+                        <label for="symBackPain"> Back Pain</label><br>
+                        <input type="checkbox" id="symAcne" name="symAcne" value="1">
+                        <label for="symAcne"> Acne</label><br>
+                        <input type="checkbox" id="symToothAche" name="symToothAche" value="1">
+                        <label for="symToothAche"> Tooth Ache</label><br>
+                        <input type="checkbox" id="symBrokenBone" name="symBrokenBone" value="1">
+                        <label for="symBrokenBone"> Broken Bone</label><br>
+
+                        <button type="submit" class="btn btn-primary" formaction="symp_form/add-symptom">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

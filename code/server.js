@@ -18,15 +18,23 @@ var has_patient_searched = 0;
 var pat_table_idx = 0;
 var has_doctor_searched = 0;
 var has_doctor_searched1 = 0;
+var has_doctor_searched2 = 0;
 var doc_table_idx = 0;
+var show_add_box = 0;
+var show_update_box = 0;
+var show_remove_box = 0;
 var patient_search_data = [];
 var patient_search_data1 = [];
 var symptom_search_data = [];
 var prescription_search_data = [];
 var doctor_data = [];
 var patient_data = [];
+var doctor_prescription_data = [];
 var info_mismatch = '';
 var upd_info = '';
+var temp_invalid = '';
+var pid_invalid = '';
+var did_invalid = '';
 // set up ejs view engine 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -166,11 +174,17 @@ app.post('/go-to-doctor', function(req, res) {
 });
 
 app.get('/doctor', function(req, res) {
-	res.render('doctor', {has_doctor_searched: has_doctor_searched, has_doctor_searched1: has_doctor_searched1, doc_table_idx: doc_table_idx, patient_search_data1: patient_search_data1, patient_data: patient_data, symptom_search_data: symptom_search_data, prescription_search_data: prescription_search_data, upd_info: upd_info});
+	res.render('doctor', {has_doctor_searched: has_doctor_searched, has_doctor_searched1: has_doctor_searched1, has_doctor_searched2:
+		has_doctor_searched2, doc_table_idx: doc_table_idx,	patient_search_data1: patient_search_data1, patient_data: patient_data,
+		symptom_search_data: symptom_search_data, prescription_search_data:	prescription_search_data, upd_info: upd_info, info_mismatch:
+		info_mismatch, doctor_prescription_data: doctor_prescription_data, show_add_box: show_add_box, show_update_box: show_update_box,
+		show_remove_box: show_remove_box, did_invalid: did_invalid});
 	patient_search_data1 = [];
 	symptom_search_data = [];
 	prescription_search_data = [];
-	upd_info = [];
+	upd_info = '';
+	doctor_prescription_data = [];
+	did_invalid = '';
 });
 
 app.post('/doctor/search-patients', function(req, res) {
@@ -271,6 +285,48 @@ app.post('/doctor/vac-overdue', function(req, res) {
 	});
 });
 
+app.post('/doctor/show-add', function(req, res) {
+	show_add_box = 1;
+
+	if (show_update_box == 1) {
+		show_update_box = 0;
+	}
+
+	if (show_remove_box == 1) {
+		show_remove_box = 0;
+	}
+
+	res.redirect('/doctor');
+});
+
+app.post('/doctor/show-update', function(req, res) {
+	show_update_box = 1;
+
+	if (show_add_box == 1) {
+		show_add_box = 0;
+	}
+
+	if (show_remove_box == 1) {
+		show_remove_box = 0;
+	}
+
+	res.redirect('/doctor');
+});
+
+app.post('/doctor/show-remove', function(req, res) {
+	show_remove_box = 1;
+
+	if (show_add_box == 1) {
+		show_add_box = 0;
+	}
+
+	if (show_update_box == 1) {
+		show_update_box = 0;
+	}
+
+	res.redirect('/doctor');
+});
+
 app.post('/doctor/add-patient', function(req, res) {
 	var PatientID;
 	var FirstName = req.body.FirstName;
@@ -300,12 +356,15 @@ app.post('/doctor/add-patient', function(req, res) {
 				res.send(err)
 				return;
 			}
+
+			show_add_box = 0;
+
 			res.redirect('/doctor');
 		});
 	});
 });
 
-app.post('/doctor/update', function(req, res) {
+app.post('/doctor/update-patient', function(req, res) {
 	var PatientID = req.body.updPatientID;
 	var FirstName = req.body.updFirstName;
 	var LastName = req.body.updLastName;
@@ -335,7 +394,9 @@ app.post('/doctor/update', function(req, res) {
 					res.send(err);
 					return;
 				}
-				upd_info = "Patient info updated"
+
+				show_update_box = 0;
+				upd_info = "Patient info updated";
 				res.redirect('/doctor');
 			});
 		}
@@ -343,7 +404,7 @@ app.post('/doctor/update', function(req, res) {
 });
 
 
-app.post('/remove', function(req, res) {
+app.post('/remove-patient', function(req, res) {
 	var pid = req.body.delPatientID;
 	var fn = req.body.delFirstName;
 	var ln = req.body.delLastName;
@@ -372,7 +433,168 @@ app.post('/remove', function(req, res) {
 					res.send(err);
 					return;
 				}
+
+				show_remove_box = 0;
+
 				res.redirect('/');
+			});
+		}
+	});
+});
+
+app.post('/doctor/go-to-symptoms-form', function(req, res) {
+	res.redirect('/doctor/symp_form');
+});
+
+app.get('/doctor/symp_form', function(req, res) {
+	res.render('symp_form', {pid_invalid: pid_invalid, temp_invalid: temp_invalid});
+	pid_invalid = '';
+	temp_invalid = '';
+});
+
+app.post('/doctor/symp_form/add-symptom', function(req, res) {
+	var PatientID = req.body.symPatientID;
+	var DigDate= req.body.symDigDate;
+	var SoreThroat = req.body.symSoreThroat;
+	var Headache = req.body.symHeadache;
+	var StomachAche = req.body.symStomachAche;
+	var Hives = req.body.symHives;
+	var Temperature = req.body.symTemperature;
+	var Cough = req.body.symCough;
+	var Wound = req.body.symWound;
+	var Burn = req.body.symBurn;
+	var MuscleAche = req.body.symMuscleAche;
+	var BackPain = req.body.symBackPain;
+	var Acne = req.body.symAcne;
+	var ToothAche = req.body.symToothAche;
+	var BrokenBone = req.body.symBrokenBone;
+
+	if (SoreThroat == null) {
+		SoreThroat = '0';
+	}
+	if (Headache == null) {
+		Headache = '0';
+	}
+	if (StomachAche == null) {
+		StomachAche = '0';
+	}
+	if (Hives == null) {
+		Hives = '0';
+	}
+	if (Cough == null) {
+		Cough = '0';
+	}
+	if (Wound == null) {
+		Wound = '0';
+	}
+	if (Burn == null) {
+		Burn = '0';
+	}
+	if (MuscleAche == null) {
+		MuscleAche = '0';
+	}
+	if (BackPain == null) {
+		BackPain = '0';
+	}
+	if (Acne == null) {
+		Acne = '0';
+	}
+	if (ToothAche == null) {
+		ToothAche = '0';
+	}
+	if (BrokenBone == null) {
+		BrokenBone = '0';
+	}
+
+	if (Temperature != null && PatientID != null) {
+		var IDQry = `SELECT PatientID FROM Patients WHERE PatientID = ${PatientID}`;
+
+		console.log(IDQry);
+		connection.query(IDQry, function(err, result) {
+			if (err) {
+				res.send(err);
+				return;
+			}
+
+			console.log(result);
+
+			if (result[0] == null) {
+				pid_invalid = 'Invalid Patient ID';
+			} else {
+				var instSymData = `INSERT INTO Symptoms (PatientID, DigDate, SoreThroat, Headache, StomachAche, Hives, Temperature, Cough, Wound, Burn, MuscleAche, BackPain, Acne, ToothAche, BrokenBone)
+				VALUES ('${PatientID}', '${DigDate}', '${SoreThroat}', '${Headache}','${StomachAche}', '${Hives}', '${Temperature}', '${Cough}', '${Wound}', '${Burn}', '${MuscleAche}', '${BackPain}', '${Acne}', '${ToothAche}', '${BrokenBone}')`;
+
+				console.log(instSymData);
+				connection.query(instSymData, function(err, result) {
+					if (err) {
+						res.send(err);
+						return;
+					}
+
+					res.redirect('/doctor');
+				});
+			}
+		});
+	} else if (Temperature == null && PatientID != null) {
+		temp_invalid = 'No Temperature Input';
+	} else if (Temperature != null && PatientID == null) {
+		pid_invalid = 'No Patient ID Input';
+	} else {
+		temp_invalid = 'No Temperature Input';
+		pid_invalid = 'No Patient ID Input';
+	}
+});
+
+app.post('/doctor/check-patient-prescriptions', function(req, res) {
+	var doctorid = req.body.did;
+	has_doctor_searched2 = 1;
+
+	// checks on the text box input
+	if (doctorid != null) {
+		var sql = `SELECT PatientID, Medication, IssueDate, Dosage
+			FROM Appointments a NATURAL JOIN Doctors JOIN Patients USING (PatientID) JOIN Prescriptions USING (PatientID)
+			WHERE DoctorID = '${doctorid}'
+			ORDER BY IssueDate DESC`;
+
+		console.log(sql);
+		connection.query(sql, function(err, result) {
+			doctor_prescription_data = result;
+			console.log(doctor_prescription_data);
+			if (err) {
+				res.send(err)
+				return;
+			}
+
+			res.redirect('/doctor');
+		});	
+	}
+});
+
+
+app.post('/doctor/renew-prescriptions', function(req, res) {
+	var doctorid = req.body.did;
+	var DIDQry = `SELECT DoctorID FROM Doctors WHERE DoctorID = ${doctorid}`;
+
+	console.log(DIDQry);
+	connection.query(DIDQry, function(err, result) {
+		if (err) {
+			res.send(err);
+			return;
+		}
+
+		console.log(result);
+
+		if (result[0] == null) {
+			did_invalid = 'Invalid Doctor ID';
+		} else {
+			var sql = `CALL RenewPrescriptions(${doctorid})`;
+			console.log(sql);
+			connection.query(sql, function(err, result) {
+				if (err) {
+					res.send(err);
+					return;
+				}
+				res.redirect('/doctor');
 			});
 		}
 	});
