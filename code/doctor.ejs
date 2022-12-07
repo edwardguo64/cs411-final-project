@@ -78,10 +78,11 @@
                 <div class="card-body">
                     <h2>Edit Patients</h2>
                     <form method="POST">
-                        <button type="submit" class="btn btn-primary" formaction="doctor/add-patient">Add</button>
-                        <button type="submit" class="btn btn-primary" formaction="doctor/update-patient">Edit</button>
-                        <button type="submit" class="btn btn-primary" formaction="doctor/remove-patient">Delete</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/show-add">Add</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/show-update">Edit</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/show-remove">Delete</button>
                     </form>
+                    <p><%= upd_info %></p>
                 </div>
             </div>
         </div>
@@ -90,16 +91,15 @@
             <div class="card">
                 <div class="card-body">
                     <h2>Register New Patient</h2>
-                    <form action="add" method="POST">
+                    <form action="add-patient" method="POST">
                         <div class="form-group">
-                            <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="FirstName">
-                            <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="LastName">
-                            <input type="text" class="form-control col-lg-9" id="BirthDate" aria-describedby="emailHelp" placeholder="Birth Date (yyyy-mm-dd)" name="BirthDate">
+                            <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="FirstName"><br>
+                            <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="LastName"><br>
                             <label>
                                 Birth Date:
                                 <input type="date" id="BirthDate" name="BirthDate" value="2022-11-11" min="1900-01-01" max="2023-01-01">
-                            </label>
-                            <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="Height">
+                            </label><br>
+                            <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="Height"><br>
                             <input type="text" class="form-control col-lg-9" id="Weight" aria-describedby="emailHelp" placeholder="Weight (kg)" name="Weight">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -112,17 +112,33 @@
             <div class="card">
                 <div class="card-body">
                     <h2>Update Patient</h2>
-                    <form action="update" method="POST">
+                    <form action="update-patient" method="POST">
                         <div class="form-group">
-                            <input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="updPatientID">
-	                        <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="updFirstName">
-                            <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="updLastName">
-                            <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="updHeight">
+                            <input type="text" class="form-control col-lg-9" id="PatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="updPatientID"><br>
+	                        <input type="text" class="form-control col-lg-9" id="FirstName" aria-describedby="emailHelp" placeholder="First Name" name="updFirstName"><br>
+                            <input type="text" class="form-control col-lg-9" id="LastName" aria-describedby="emailHelp" placeholder="Last Name" name="updLastName"><br>
+                            <input type="text" class="form-control col-lg-9" id="Height" aria-describedby="emailHelp" placeholder="Height (cm)" name="updHeight"><br>
                             <input type="text" class="form-control col-lg-9" id="Weight" aria-describedby="emailHelp" placeholder="Weight (kg)" name="updWeight">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-                    <p><%= upd_info %></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="patient_remove">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Remove Patient</h2>
+                    <form action="remove" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control col-lg-9" id="delPatientID" aria-describedby="emailHelp" placeholder="Patient ID" name="delPatientID"><br>
+	                        <input type="text" class="form-control col-lg-9" id="delFirstName" aria-describedby="emailHelp" placeholder="First Name" name="delFirstName"><br>
+                            <input type="text" class="form-control col-lg-9" id="delLastName" aria-describedby="emailHelp" placeholder="Last Name" name="delLastName">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <p><%= info_mismatch %></p>
                 </div>
             </div>
         </div>
@@ -280,6 +296,99 @@
             </div>
         </div>
 
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Update Patient Info</h2>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="did">Doctor ID:</label>
+                            <input type="text" class="form-control col-lg-9" id="did" aria-describedby="emailHelp" placeholder="Enter Patient ID" name="did">
+                        </div>
+                        <p><% did_invalid %></p>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/go-to-symptoms-form">Symptoms Form</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/check-patient-prescriptions">Check Patient Prescriptions</button>
+                        <button type="submit" class="btn btn-primary" formaction="doctor/renew-prescriptions">Renew Patient Prescriptions</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="doctor_prescriptions_table">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Patient Prescriptions</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                            <th>Patient Id</th>
+                            <th>Prescriptions</th>
+                            <th>Issue Date</th>
+                            <th>Dosage</th>
+                            </tr>
+                            <%if(doctor_prescription_data.length != 0 ) 
+                            {
+                                doctor_prescription_data.forEach(function(patient){
+                            %>
+                                <tr>
+                                <td><%= patient.PatientID %> </td>
+                                <td><%= patient.Medication %></td>
+                                <td><%= patient.IssueDate %></td>
+                                <td><%= patient.Dosage %></td>
+                                </tr>
+                            <%
+                                });
+                            }
+                            else{
+                            %>
+                                <tr>
+                                <td colspan="4">No Data Found</td>
+                                </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if (show_add_box == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_add");
+                x.style.display = "none";
+            </script>
+        <% } else { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_add");
+                x.style.display = "inline";
+            </script>
+        <% } %>
+
+        <% if (show_update_box == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_update");
+                x.style.display = "none";
+            </script>
+        <% } else { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_update");
+                x.style.display = "inline";
+            </script>
+        <% } %>
+
+        <% if (show_remove_box == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_remove");
+                x.style.display = "none";
+            </script>
+        <% } else { %>
+            <script language="javascript">
+                var x = document.getElementById("patient_remove");
+                x.style.display = "inline";
+            </script>
+        <% } %>
+
         <% if (has_doctor_searched1 == 0) { %>
             <script language="javascript">
                 var x = document.getElementById("patient_search_table1");
@@ -338,6 +447,18 @@
                     x.style.display = "inline";
                 </script>
             <% } %>
+        <% } %>
+
+        <% if (has_doctor_searched2 == 0) { %>
+            <script language="javascript">
+                var x = document.getElementById("doctor_prescriptions_table");
+                x.style.display = "none";
+            </script>
+        <% } else { %>
+            <script language="javascript">
+                var x = document.getElementById("doctor_prescriptions_table");
+                x.style.display = "inline";
+            </script>
         <% } %>
     </body>
 </html>
