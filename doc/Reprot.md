@@ -64,4 +64,4 @@ Much of the database design was done by Sean and Lilian, Daniel worked on the da
 
 ## Demo Video
 
-Video Link: 
+Video Link: <https://drive.google.com/file/d/1hE2VmoIgTlk1rfGyFeO2C18K8Urm8lHS/view?usp=share_link>

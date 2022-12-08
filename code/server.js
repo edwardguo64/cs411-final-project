@@ -436,7 +436,7 @@ app.post('/doctor/remove-patient', function(req, res) {
 
 				show_remove_box = 0;
 
-				res.redirect('/');
+				res.redirect('/doctor');
 			});
 		}
 	});
