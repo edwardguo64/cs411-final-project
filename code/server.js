@@ -404,7 +404,7 @@ app.post('/doctor/update-patient', function(req, res) {
 });
 
 
-app.post('/remove-patient', function(req, res) {
+app.post('/doctor/remove-patient', function(req, res) {
 	var pid = req.body.delPatientID;
 	var fn = req.body.delFirstName;
 	var ln = req.body.delLastName;
